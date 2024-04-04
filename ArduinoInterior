@@ -1,0 +1,289 @@
+#include <LiquidCrystal_I2C.h>
+#include <Servo.h>
+
+//SENSORES
+LiquidCrystal_I2C lcd(32, 16, 2); //sensor LCD
+const int SENSOR_LIGHT = A1;
+const int SENSOR_TEMP = A2; //sensor temperatura 
+const int SENSOR_GAS = A3;
+
+//PINS
+const int PIN_BUTTON = 6;
+const int PIN_SERVO = 7;
+const int PIN_LED_GREEN = 8;
+const int PIN_LED_BLUE = 9;
+const int PIN_LED_RED = 10;
+const int PIN_LIGHT_BULB = 11;
+const int PIN_PIEZO = 12;
+const int PIN_PIR = 13;
+
+//standard levels
+const int GAS_SAFETY = 100; //ppm
+const int TEMP_SAFETY = 70; //degrees - Celsius
+const int TEMP_AC_ON = 21; //degrees - Celsius
+const int TEMP_AC_OFF = 27; //degrees - Celsius
+const int LIGHT_ALIVE = 5000; //miliseconds
+const int LUMINOSITY = 500;
+const int MESSAGE_TIMEOUT = 10000;
+const int MESSAGE_AC_TIMEOUT = 3000;
+
+Servo servo;
+
+String SYSTEM_STATUS; //system status message
+bool AC_ON; //air conditioning state
+bool ALARM_STATUS;//system is detecting gas
+bool DOOR_STATUS;
+  
+//light states
+int pirState;
+int lightSensorValue;
+bool lightOn;
+
+//timestamps
+float alarm_timestamp;
+float ac_message_timestamp;
+float message_timestamp;
+
+unsigned long previousMilisecs = 0;
+unsigned int ALARM_FREQUENCY; 
+
+int gasLevel; 
+float celsius;
+
+void setup()
+{  
+  Serial.begin(9600);
+  
+  //inputs
+  pinMode(PIN_BUTTON, INPUT);
+  pinMode(PIN_PIR, INPUT);
+  pinMode(SENSOR_LIGHT, INPUT);
+  pinMode(SENSOR_GAS,INPUT);
+  
+  //outputs
+  pinMode(PIN_SERVO ,OUTPUT);
+  pinMode(PIN_LED_GREEN, OUTPUT);
+  pinMode(PIN_LED_BLUE, OUTPUT);
+  pinMode(PIN_LED_RED, OUTPUT);
+  pinMode(PIN_LIGHT_BULB, OUTPUT);
+  pinMode(PIN_PIEZO,OUTPUT);
+  
+  servo.attach(PIN_SERVO);
+  servo.write(0);
+  DOOR_STATUS = false;
+  
+  lcd.begin(16,2);
+  lcd.init();
+  lcd.backlight();
+  
+  pirState = LOW;
+  lightSensorValue = 0;
+  lightOn = false;
+  
+  ALARM_FREQUENCY = 523;
+
+  system_ok(); //system default
+}
+
+void loop()
+{  
+  gasLevel = analogRead(SENSOR_GAS);
+  //Serial.print("Gas level:");
+  //Serial.println(gasLevel);
+  pirState = digitalRead(PIN_PIR);
+  lightSensorValue = analogRead(SENSOR_LIGHT);
+  
+  //check illumination
+  //checks light level and movement
+  if (pirState == HIGH && lightSensorValue < LUMINOSITY) {
+    digitalWrite(PIN_LIGHT_BULB, HIGH);
+    lightOn = true;
+    previousMilisecs = millis();
+  }
+
+  //checks time to shut down the light after last movement detected
+  if (lightOn && millis() - previousMilisecs > LIGHT_ALIVE) {
+    digitalWrite(PIN_LIGHT_BULB, LOW);
+    lightOn = false;
+  }
+  
+  float input = analogRead(SENSOR_TEMP) * 5000.0 / 1024.0;
+  // temperature red from tension received
+  celsius = (input - 500.0) / 10.0;
+  
+  //check temperature
+  if(celsius < TEMP_AC_ON){
+    //turn on blue led
+    digitalWrite(PIN_LED_BLUE,HIGH);
+    digitalWrite(PIN_LED_RED, LOW);
+    digitalWrite(PIN_LED_GREEN, LOW);
+    if (!AC_ON){
+      turn_ac_on(celsius);
+    }
+  }else if (celsius > TEMP_AC_OFF){
+    //turn on red led
+    digitalWrite(PIN_LED_BLUE, LOW);
+    digitalWrite(PIN_LED_RED, HIGH);
+    digitalWrite(PIN_LED_GREEN, LOW);
+    if (AC_ON){
+   	  turn_ac_off(celsius);
+    }
+  }else{
+  	//turn on green led
+    digitalWrite(PIN_LED_BLUE, LOW);
+    digitalWrite(PIN_LED_RED, LOW);
+    digitalWrite(PIN_LED_GREEN, HIGH);
+  }
+  
+  //check smoke concentration (GAS and FIRE)
+  if(gasLevel > GAS_SAFETY){
+    if(celsius > TEMP_SAFETY){
+      system_fire();
+    }else{
+      system_gas();
+    }
+  }else{
+  	digitalWrite(PIN_PIEZO, LOW);
+    system_ok();
+  }
+  
+  if(millis() - ac_message_timestamp > MESSAGE_AC_TIMEOUT){
+    ac_message_timestamp = millis();
+    refresh_lcd();
+  }
+  
+  /*if(millis() - message_timestamp > MESSAGE_TIMEOUT){
+    //update LCD
+    message_timestamp = millis();
+    refresh_lcd();
+  }*/
+  
+  //button to close/open door
+  if(digitalRead(PIN_BUTTON) == HIGH){
+    if(DOOR_STATUS){
+      servo.write(0);
+    }else{
+      servo.write(90);
+    }
+    DOOR_STATUS = !DOOR_STATUS;
+  }
+  
+  //receive data from exterior arduino
+  if (Serial.available() > 0) {
+    String receivedData = Serial.readString();
+    receivedData.trim();
+    String receivedCommand = extract_command(receivedData);
+    Serial.print("Command received: ");
+    Serial.println(receivedCommand);
+    //switch case para funções do comando
+    if(receivedCommand.equals("401")){ //insucess security code
+      ring_alarm();
+    }else if(receivedCommand.equals("400")){//success security code
+      servo.write(90);
+      DOOR_STATUS = true;
+    }else if(receivedCommand.equals("1")){ //Volume up remote
+      if(ALARM_FREQUENCY < 60000){
+        ALARM_FREQUENCY = ALARM_FREQUENCY + 500;
+      }
+    }else if(receivedCommand.equals("9")){ //volume down remote
+      if(ALARM_FREQUENCY > 531){
+        ALARM_FREQUENCY = ALARM_FREQUENCY - 500;
+      }
+    }else if(receivedCommand.equals("12")){ //0 remote
+      String temperature = extract_text(receivedData);
+      lcd.clear();
+      lcd.print("TEMP INT: ");
+      lcd.print(celsius);
+      lcd.setCursor(0,1);
+      lcd.print("TEMP EXT: " + extract_text(receivedData));
+    }
+  }
+  
+  
+}//end loop
+
+
+//system is ok
+void system_ok(){
+  if(SYSTEM_STATUS != "OK"){
+    SYSTEM_STATUS = "OK"; 
+    refresh_lcd();
+  }
+} 
+
+//fire warning
+void system_fire(){
+  if(SYSTEM_STATUS != "FIRE"){
+    SYSTEM_STATUS = "FIRE";
+    ring_alarm();
+    refresh_lcd();
+  }else{
+    if(millis() - alarm_timestamp > 3000){
+      ring_alarm();
+    }
+  }
+}  
+
+//gas warning
+void system_gas(){
+  if(SYSTEM_STATUS != "GAS"){
+    SYSTEM_STATUS = "GAS"; 
+    ring_alarm();
+    refresh_lcd();
+  }else{
+    if(millis() - alarm_timestamp > 3000){
+      ring_alarm();
+    }
+  }
+}  
+
+//turn on AC
+void turn_ac_on(float celsius){
+  AC_ON = !AC_ON;
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Turning ON AC");
+  ac_message_timestamp = millis();
+}
+//turn off AC
+void turn_ac_off(float celsius){
+  AC_ON = !AC_ON;
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Turning OFF AC");
+  ac_message_timestamp = millis();
+}
+
+//alarm ring
+void ring_alarm(){
+  alarm_timestamp = millis();
+  tone(PIN_PIEZO, ALARM_FREQUENCY, 5000); // 523 Hz, 5 seconds
+}
+
+void refresh_lcd(){
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print(SYSTEM_STATUS);
+}
+
+String extract_command(String text){
+  int text_size = text.length() - 1;
+  int index = text.indexOf("-");
+  
+  if(index >= 0){
+    return text.substring(0, index);
+  }
+  
+  return text;
+}
+
+String extract_text(String text){
+  int text_size = text.length() - 1;
+  int index = text.indexOf("-");
+  
+  if(index >= 0){
+    return text.substring(index + 1, text_size);
+  }
+  
+  return text;
+}
