@@ -22,15 +22,15 @@ PT-pt
             Visualização das temperaturas interior e exterior
             Alteração da frequência (Hz) do alarme
 
-ANEXOS
-    Anexo I - Tabela_I_Lista_Componentes.csv
-    Anexo II - Figura_I_Vista_Circuito.png
-    Anexo III - Figura_II_Vista_Esquematica.pdf
-    Anexo IV - Figura_III_LCD.png
-    Anexo V - ArduinoInterior
-    Anexo VI - ArduinoExterior
-    Anexo VII - Mapeamento_Controlo_Remoto.png
-    Anexo VIII - Comandos_Arduino_Interior.png
+    ANEXOS
+        Anexo I - Tabela_I_Lista_Componentes.csv
+        Anexo II - Figura_I_Vista_Circuito.png
+        Anexo III - Figura_II_Vista_Esquematica.pdf
+        Anexo IV - Figura_III_LCD.png
+        Anexo V - ArduinoInterior
+        Anexo VI - ArduinoExterior
+        Anexo VII - Mapeamento_Controlo_Remoto.png
+        Anexo VIII - Comandos_Arduino_Interior.png
 
 
 IMPLEMENTAÇÃO DO PROJETO
