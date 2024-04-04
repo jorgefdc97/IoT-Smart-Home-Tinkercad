@@ -9,16 +9,14 @@ PT-pt
 
     IMPLEMENTAÇÃO DO PROJETO
     FUNCIONALIDADES
-        Funcionalidades exigidas
-            Visor LCD
-            Deteção e alarme de gás
-            Deteção e controlo de temperatura
-            Deteção e alarme de incêndio
-            Ajuste de iluminação automático
-        Funcionalidades extra
-            Abertura automática do portão
-            Teclado com código de segurança
-            Botão para abrir/fechar porta de entrada
+        Visor LCD
+        Deteção e alarme de gás
+        Deteção e controlo de temperatura
+        Deteção e alarme de incêndio
+        Ajuste de iluminação automático
+        Abertura automática do portão
+        Teclado com código de segurança
+        Botão para abrir/fechar porta de entrada
         Controlo remoto infravermelhos
             Introdução de código de segurança
             Visualização das temperaturas interior e exterior
@@ -40,8 +38,6 @@ IMPLEMENTAÇÃO DO PROJETO
     O assistente de casa inteligente desenvolvido (Figura 1) simula 2 ambientes (interior e exterior) de uma casa, conectados pelos Arduinos: ambiente interior representado na parte inferior da Figura 1; ambiente exterior representado na parte superior da Figura 1.
 
     FUNCIONALIDADES
-        Nesta secção, serão descritas todas as funcionalidades (exigidas e extra) implementadas no assistente de casa inteligente, com a tecnologia Arduino e linguagem de programação C++ (Anexos I e II).
-        As funcionalidades exigidas são entendidas como as que representavam requisito mínimo para a conclusão do presente projeto. As funcionalidades extra são as desenvolvidas ao critério do grupo de trabalho.
     
         VISOR LCD
             Objetivo: Transmitir, ao utilizador, mensagens de informação do sistema
