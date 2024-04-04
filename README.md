@@ -5,28 +5,28 @@ Project link: https://www.tinkercad.com/things/6C1RrYInlZC-projeto-iot-20232024-
 
 ÍNDICE
 
-2. IMPLEMENTAÇÃO DO PROJETO
-3. FUNCIONALIDADES
-3.1. Funcionalidades exigidas
-3.1.1. Visor LCD
-3.1.2. Deteção e alarme de gás
-3.1.3. Deteção e controlo de temperatura
-3.1.4. Deteção e alarme de incêndio
-3.1.5. Ajuste de iluminação automático
-3.2. Funcionalidades extra
-3.2.1. Abertura automática do portão
-3.2.2. Teclado com código de segurança
-3.2.3. Botão para abrir/fechar porta de entrada
-3.2.4. Controlo remoto infravermelhos
-3.2.4.1. Introdução de código de segurança
-3.2.4.2. Visualização das temperaturas interior e exterior
-3.2.4.3. Alteração da frequência (Hz) do alarme
+    IMPLEMENTAÇÃO DO PROJETO
+    FUNCIONALIDADES
+        Funcionalidades exigidas
+            Visor LCD
+            Deteção e alarme de gás
+            Deteção e controlo de temperatura
+            Deteção e alarme de incêndio
+            Ajuste de iluminação automático
+        Funcionalidades extra
+            Abertura automática do portão
+            Teclado com código de segurança
+            Botão para abrir/fechar porta de entrada
+        Controlo remoto infravermelhos
+            Introdução de código de segurança
+            Visualização das temperaturas interior e exterior
+            Alteração da frequência (Hz) do alarme
 
 ANEXOS
-Anexo I - Vista esquemática do circuito
-Anexo II - Código Arduino Interior (U_INT_Arduino)
-Anexo III - Código Arduino Exterior (U_EXT_Arduino)
-Anexo IV - Mapa de teclas de controlo remoto
-Anexo V - Comandos passados para Arduino Interior
+    Anexo I - Vista esquemática do circuito
+    Anexo II - Código Arduino Interior (U_INT_Arduino)
+    Anexo III - Código Arduino Exterior (U_EXT_Arduino)
+    Anexo IV - Mapa de teclas de controlo remoto
+    Anexo V - Comandos passados para Arduino Interior
 
 
