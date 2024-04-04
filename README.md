@@ -21,12 +21,12 @@ Project link: https://www.tinkercad.com/things/6C1RrYInlZC-projeto-iot-20232024-
             Introdução de código de segurança
             Visualização das temperaturas interior e exterior
             Alteração da frequência (Hz) do alarme
-
-ANEXOS
-    Anexo I - Vista esquemática do circuito
-    Anexo II - Código Arduino Interior (U_INT_Arduino)
-    Anexo III - Código Arduino Exterior (U_EXT_Arduino)
-    Anexo IV - Mapa de teclas de controlo remoto
-    Anexo V - Comandos passados para Arduino Interior
+            
+    ANEXOS
+        Anexo I - Vista esquemática do circuito
+        Anexo II - Código Arduino Interior (U_INT_Arduino)
+        Anexo III - Código Arduino Exterior (U_EXT_Arduino)
+        Anexo IV - Mapa de teclas de controlo remoto
+        Anexo V - Comandos passados para Arduino Interior
 
 
