@@ -9,16 +9,14 @@ PT-pt
 
     IMPLEMENTAÇÃO DO PROJETO
     FUNCIONALIDADES
-        Funcionalidades exigidas
-            Visor LCD
-            Deteção e alarme de gás
-            Deteção e controlo de temperatura
-            Deteção e alarme de incêndio
-            Ajuste de iluminação automático
-        Funcionalidades extra
-            Abertura automática do portão
-            Teclado com código de segurança
-            Botão para abrir/fechar porta de entrada
+        Visor LCD
+        Deteção e alarme de gás
+        Deteção e controlo de temperatura
+        Deteção e alarme de incêndio
+        Ajuste de iluminação automático
+        Abertura automática do portão
+        Teclado com código de segurança
+        Botão para abrir/fechar porta de entrada
         Controlo remoto infravermelhos
             Introdução de código de segurança
             Visualização das temperaturas interior e exterior
