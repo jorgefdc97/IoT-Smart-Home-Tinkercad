@@ -22,20 +22,23 @@ PT-pt
             Visualização das temperaturas interior e exterior
             Alteração da frequência (Hz) do alarme
 
-    ANEXOS
-        Anexo I - Vista esquemática do circuito
-        Anexo II - Código Arduino Interior (U_INT_Arduino)
-        Anexo III - Código Arduino Exterior (U_EXT_Arduino)
-        Anexo IV - Mapa de teclas de controlo remoto
-        Anexo V - Comandos passados para Arduino Interior
+ANEXOS
+    Anexo I - Tabela_I_Lista_Componentes.csv
+    Anexo II - Figura_I_Vista_Circuito.png
+    Anexo III - Figura_II_Vista_Esquematica.pdf
+    Anexo IV - Figura_III_LCD.png
+    Anexo V - ArduinoInterior
+    Anexo VI - ArduinoExterior
+    Anexo VII - Mapeamento_Controlo_Remoto.png
+    Anexo VIII - Comandos_Arduino_Interior.png
 
 
 IMPLEMENTAÇÃO DO PROJETO
 
-    Nesta secção, serão apresentadas as motivações do projeto, os componentes utilizados (Tabela 1), a vista do circuito desenvolvido (Figura 1) e a vista esquemática do circuito desenvolvido (Anexo I). 
+    Nesta secção, serão apresentadas as motivações do projeto, os componentes utilizados (Tabela_I_Lista_Componentes), a vista do circuito desenvolvido (Tabela_I_Lista_Componentes) e a vista esquemática do circuito desenvolvido (Figura_II_Vista_Esquematica). 
 
     O objetivo do grupo, ao longo do projeto, foi explorar e experimentar os vários componentes que o simulador Tinkercad dispõe para desenvolver um assistente que poderia ser implementado numa casa, na realidade. Para além da curiosidade em relação às funcionalidades dos componentes individualmente, também foi explorada a interligação entre os vários componentes e as funcionalidades que poderiam ser extraídas caso houvesse conexões e transferências de informação. Por esse motivo, não foram utilizados componentes em duplicado, a menos que a sua funcionalidade provoque e/ou sofra comportamentos diferentes daqueles já obtidos.
-    O assistente de casa inteligente desenvolvido (Figura 1) simula 2 ambientes (interior e exterior) de uma casa, conectados pelos Arduinos: ambiente interior representado na parte inferior da Figura 1; ambiente exterior representado na parte superior da Figura 1.
+    O assistente de casa inteligente desenvolvido (Figura_I_Vista_Circuito) simula 2 ambientes (interior e exterior) de uma casa, conectados pelos Arduinos: ambiente interior representado na parte inferior da Figura_I_Vista_Circuito; ambiente exterior representado na parte superior da Figura_I_Vista_Circuito.
 
     FUNCIONALIDADES
     
@@ -131,7 +134,7 @@ IMPLEMENTAÇÃO DO PROJETO
                     Controlo remoto
                     SERVO_INT_Frontdoor
                     PIEZO_INT_Alarm
-                Implementação: Como o sensor de infravermelhos está constantemente a ler a informação enviada pelo controlo remoto, optou-se por, ao ler o sinal da tecla Power (Anexo IV), entrar num ciclo que regista as teclas pressionadas até ao máximo de 4 teclas ou num intervalo temporal de 5 segundos. Este conjunto de teclas pressionadas será tratado como o código PIN do keypad (ligar alarme ao fim de 3 tentativas sem sucesso ou abrir a porta de entrada após inserção de código válido).
+                Implementação: Como o sensor de infravermelhos está constantemente a ler a informação enviada pelo controlo remoto, optou-se por, ao ler o sinal da tecla Power (Mapeamento_Controlo_Remoto), entrar num ciclo que regista as teclas pressionadas até ao máximo de 4 teclas ou num intervalo temporal de 5 segundos. Este conjunto de teclas pressionadas será tratado como o código PIN do keypad (ligar alarme ao fim de 3 tentativas sem sucesso ou abrir a porta de entrada após inserção de código válido).
 
             VISUALIZAÇÃO DAS TEMPERATURAS INTERIOR E EXTERIOR
                 Objetivo: Transmitir temperaturas interior e exterior, no LCD
@@ -141,7 +144,7 @@ IMPLEMENTAÇÃO DO PROJETO
                     U_EXT_TemperatureSensor
                     U_INT_TemperatureSensor
                     U_INT_LCD
-                Implementação: Ao carregar no botão 0 do controlo remoto, é registada a temperatura do ambiente exterior pelo sensor de temperatura (U_EXT_TemperatureSensor) ligado ao Arduino Exterior, é enviado o código 12 para o Arduino Interior juntamente com a temperatura capturada. No Arduino Interior, o comando é separado da informação da temperatura e é também capturada, através do sensor de temperatura (U_INT_TemperatureSensor) ligado ao Arduino Interior, a temperatura do ambiente interior. Os valores são transmitidos no LCD (U_INT_LCD) (Figura 2).
+                Implementação: Ao carregar no botão 0 do controlo remoto, é registada a temperatura do ambiente exterior pelo sensor de temperatura (U_EXT_TemperatureSensor) ligado ao Arduino Exterior, é enviado o código 12 para o Arduino Interior juntamente com a temperatura capturada. No Arduino Interior, o comando é separado da informação da temperatura e é também capturada, através do sensor de temperatura (U_INT_TemperatureSensor) ligado ao Arduino Interior, a temperatura do ambiente interior. Os valores são transmitidos no LCD (U_INT_LCD) (Figura_III_LCD).
                 Nota: Os valores capturados pelos sensores de temperatura, não são as temperaturas em graus Celsius e, portanto, têm de ser traduzidas como exemplificado na Equação 1.    
 
             ALTERAÇÃO DA FREQUÊNCIA (HZ) DO ALARME
@@ -150,6 +153,6 @@ IMPLEMENTAÇÃO DO PROJETO
                     U_EXT_InfraredSensor
                     Controlo remoto
                     PIEZO_INT_Alarm
-                Implementação: Através das teclas VOL+ e VOL- (Anexo IV), pode-se aumentar ou diminuir a frequência (em hertz), para que o som do alarme seja mais agudo ou mais grave. 
-                Nota: No código (Anexo II), é necessário verificar os valores limiares da frequência do alarme, visto que a variação é feita entre 31 e 60500 (exclusivo).
+                Implementação: Através das teclas VOL+ e VOL- (Mapeamento_Controlo_Remoto), pode-se aumentar ou diminuir a frequência (em hertz), para que o som do alarme seja mais agudo ou mais grave. 
+                Nota: No código (ArduinoInterior.txt), é necessário verificar os valores limiares da frequência do alarme, visto que a variação é feita entre 31 e 60500 (exclusivo).
 
